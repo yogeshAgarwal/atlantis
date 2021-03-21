@@ -7,7 +7,6 @@ class DistanceCalculate:
         lon2 = radians(lon2)
         lat1 = radians(lat1)
         lat2 = radians(lat2)
-        # Haversine formula
         dlon = lon2 - lon1
         dlat = lat2 - lat1
         a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
