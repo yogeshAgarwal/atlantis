@@ -38,14 +38,16 @@ if __name__ == '__main__':
         direction_lon2 = re.findall(r'[a-zA-Z]+', lon2_part)[0]
 
         lat1 = float(lat1) if direction_lat1 == "N" else -float(lat1)
-        lon1 = float(lon1) if direction_lat1 == "W" else -float(lon1)
+        lon1 = float(lon1) if direction_lat1 == "E" else -float(lon1)
         lat2 = float(lat2) if direction_lat1 == "N" else -float(lat2)
-        lon2 = float(lon2) if direction_lat1 == "W" else -float(lon2)
+        lon2 = float(lon2) if direction_lat1 == "E" else -float(lon2)
         # print(lat1, lon1, lat2, lon2)
         if not lat1 or not lon1 or not lat2 or not lon2:
             print("Wrong Input, please enter input in correct format")
         distance_ob = DistanceCalculate()
-        print(distance_ob.distance(lat1, lat2, lon1, lon2))
+        ans = distance_ob.distance(lat1, lat2, lon1, lon2)
+        ans = round(ans,2)
+        print("Output: City 1 and City 2 are {} km apart".format(ans))
     except Exception as e:
         print("\ne",e)
         print("Wrong Input, Please give input in correct format")
