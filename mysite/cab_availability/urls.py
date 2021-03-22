@@ -14,7 +14,7 @@ urlpatterns = [
         Registration.as_view(),
         name='register'),
     path(
-        'api/<int:driver_id>/update-location/',
+        '<int:driver_id>/update-location/',
         UpdateLocation.as_view(),
         name='update-location'),
     path(

@@ -2,6 +2,7 @@
 # Standard Library
 import csv
 import re
+from math import radians, cos, sin, asin, sqrt
 # Third Party Library
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +10,7 @@ from rest_framework import status
 
 from .serializers import CabDriverSerializer
 from .models import CabPosition, CabDriver
+
 
 class Registration(APIView):
     def validate_email(self, email):
@@ -91,15 +93,19 @@ class UpdateLocation(APIView):
 
         position = CabPosition.objects.filter(cab_id=driver_ob.id).first()
         if not position:
-            CabPosition.objects.create(cab=driver_ob,latitude=latitude,longitude=longitude)
+            pos = CabPosition.objects.create(cab=driver_ob,latitude=latitude,longitude=longitude)
+            print(pos)
         else:
-            position.update(latitude=latitude,longitude=longitude)
+            position.latitude=latitude
+            position.longitude=longitude
+            position.save()
+            print("YES")
         return Response({"message":"Location Updated"}, status=status.HTTP_200_OK)
 
 
 class SearchLocation(APIView):
-    def POST(self, request):
-        print(f'[UpdateLocation] POST, Data: {request.data}, {driver_id}')
+    def post(self, request):
+        print(f'[UpdateLocation] POST, Data: {request.data}')
         try:
             request_data = request.data
             if request_data is None:
@@ -120,7 +126,8 @@ class SearchLocation(APIView):
         if not ans:
             message = "NO cab Nearby"
         else:
-            message = "Thsese cabs are around you"
+            ans = [str(x) for x in ans]
+            message = "Cabs around you are (these are driver id)->"
             message += ", ".join(ans)
         return Response({"message":message}, status=status.HTTP_200_OK)
 
@@ -132,12 +139,14 @@ class SearchLocation(APIView):
 
             lat2_part = item.latitude
             lon2_part = item.longitude
+            # print(latitude,longitude,lat2_part,lon2_part)
 
-            lat1 = re.findall(r"[-+]?\d*\.\d+|\d+", longitude)[0]
-            lon1 = re.findall(r"[-+]?\d*\.\d+|\d+", latitude)[0]
+            lat1 = re.findall(r"[-+]?\d*\.\d+|\d+", latitude)[0]
+            lon1 = re.findall(r"[-+]?\d*\.\d+|\d+", longitude)[0]
             lat2 = re.findall(r"[-+]?\d*\.\d+|\d+", lat2_part)[0]
             lon2 = re.findall(r"[-+]?\d*\.\d+|\d+", lon2_part)[0]
 
+            # print(lat1,)
             if not lat1 or not lon1 or not lat2 or not lon2:
                 return False
 
