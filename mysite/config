@@ -1,0 +1,5 @@
+#example account
+Host github.com-yogeshAgarwal
+    HostName github.com
+    User git
+    IdentityFile ~/Downloads/practice/assignment/mysite/lol
